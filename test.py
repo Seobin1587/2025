@@ -1,6 +1,29 @@
 import streamlit as st
 
-# 구체적인 제품명으로 구성된 샘플 데이터베이스
+# CSS 꾸미기
+st.markdown("""
+    <style>
+    .product-card {
+        background-color: #ffe6f0;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
+    }
+    .product-title {
+        color: #ff4da6;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+    }
+    .section-title {
+        color: #ff66b3;
+        font-weight: bold;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# 샘플 데이터베이스
 cosmetics_db = {
     "라네즈 워터뱅크 크림": {
         "성분": ["정제수", "글리세린", "프로판다이올", "하이알루론산", "향료"],
@@ -29,7 +52,8 @@ cosmetics_db = {
 }
 
 # 웹사이트 제목
-st.title("화학공학 × 화장품 성분 분석기 💄🔬")
+st.title("💖 화학공학 × 화장품 성분 분석기 💖")
+st.write("제품명을 입력하면 귀엽게 분석해드려요~ 🥰")
 
 # 사용자 입력
 product_name = st.text_input("제품명을 입력하세요 (예: 라네즈 워터뱅크 크림, 닥터자르트 시카페어 크림):")
@@ -38,13 +62,18 @@ product_name = st.text_input("제품명을 입력하세요 (예: 라네즈 워�
 if st.button("제품 분석하기"):
     if product_name in cosmetics_db:
         data = cosmetics_db[product_name]
-        st.subheader(f"제품명: {product_name}")
-        st.write("**성분:** ", ", ".join(data["성분"]))
-        st.write("**효과:** ", data["효과"])
-        st.write("**알러지 유발 가능 성분:** ", ", ".join(data["알러지 유발 가능 성분"]))
-        st.write("**피부 타입 적합도:** ", data["피부 타입 적합도"])
-        st.write("**주요 기능 키워드:** ", ", ".join(data["주요 기능"]))
-        st.write("**EWG 등급 요약:** ", data["EWG 등급 요약"])
+        
+        st.markdown(f'<div class="product-card">', unsafe_allow_html=True)
+        st.markdown(f'<div class="product-title">💗 {product_name} 💗</div>', unsafe_allow_html=True)
+        st.markdown(f'<p><span class="section-title">성분:</span> {", ".join(data["성분"])}</p>', unsafe_allow_html=True)
+        st.markdown(f'<p><span class="section-title">효과:</span> {data["효과"]}</p>', unsafe_allow_html=True)
+        st.markdown(f'<p><span class="section-title">알러지 유발 성분:</span> {", ".join(data["알러지 유발 가능 성분"])}</p>', unsafe_allow_html=True)
+        st.markdown(f'<p><span class="section-title">피부 타입 적합도:</span> {data["피부 타입 적합도"]}</p>', unsafe_allow_html=True)
+        st.markdown(f'<p><span class="section-title">주요 기능:</span> {", ".join(data["주요 기능"])}</p>', unsafe_allow_html=True)
+        st.markdown(f'<p><span class="section-title">EWG 등급 요약:</span> {data["EWG 등급 요약"]}</p>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
+        
     else:
         st.error("⚠️ 데이터베이스에 없는 제품입니다. 다른 제품명을 입력해보세요.")
+
 
