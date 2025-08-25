@@ -1,7 +1,7 @@
 import streamlit as st
 
 # 귀여운 제목
-st.markdown("<h1 style='text-align: center; color: pink;'>🌸 뷰티 제품 분석기 🐰✨</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: pink;'>🌸 화학 제품 성분 분석기 🐰✨</h1>", unsafe_allow_html=True)
 st.write("궁금한 제품을 입력하면 귀엽게 알려드릴게요~ 💖")
 
 # 데이터베이스 (예시)
