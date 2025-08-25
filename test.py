@@ -1,104 +1,60 @@
 import streamlit as st
-# 사용자 입력 안내
-st.info("예시로 입력할 제품명: '라네즈 워터뱅크 크림', '닥터자르트 시카페어 크림', '이니스프리 그린티 씨드 세럼', '에뛰드 하우스 모이스트 풀 콜라겐 크림', '클리오 킬커버 파운웨어 쿠션', '미샤 타임레볼루션 나이트 리페어 앰플'")
 
+# 귀여운 제목
+st.markdown("<h1 style='text-align: center; color: pink;'>🌸 뷰티 제품 분석기 🐰✨</h1>", unsafe_allow_html=True)
+st.write("궁금한 제품을 입력하면 귀엽게 알려드릴게요~ 💖")
 
-# CSS 꾸미기
-st.markdown("""
-    <style>
-    .product-card {
-        background-color: #ffe6f0;
-        border-radius: 15px;
-        padding: 20px;
-        margin-bottom: 20px;
-        box-shadow: 3px 3px 10px rgba(0,0,0,0.1);
-    }
-    .product-title {
-        color: #ff4da6;
-        font-size: 24px;
-        font-weight: bold;
-        text-align: center;
-    }
-    .section-title {
-        color: #ff66b3;
-        font-weight: bold;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-# 샘플 데이터베이스 (다양한 제품 추가)
-cosmetics_db = {
+# 데이터베이스 (예시)
+products = {
     "라네즈 워터뱅크 크림": {
-        "성분": ["정제수", "글리세린", "프로판다이올", "하이알루론산", "향료"],
-        "효과": "피부 깊은 보습 및 수분 장벽 강화",
-        "알러지 유발 가능 성분": ["향료"],
-        "피부 타입 적합도": "건성, 복합성 피부에 적합",
-        "주요 기능": ["보습", "장벽 강화"],
-        "EWG 등급 요약": "대부분 성분은 1~2등급(안전), 일부 향료는 5등급(주의)"
+        "성분": "히알루론산, 글리세린, 베타인",
+        "효과": "피부 보습, 수분 공급, 피부 장벽 강화",
+        "알러지 성분": "향료",
+        "피부 타입 적합도": "모든 피부, 특히 건성 피부",
+        "주요 기능 키워드": "💧수분, 🌿촉촉, 🛡장벽강화",
+        "EWG 등급 요약": "대부분 1~2등급 (안전)"
     },
     "닥터자르트 시카페어 크림": {
-        "성분": ["병풀추출물", "나이아신아마이드", "글리세린", "마데카소사이드", "에탄올"],
-        "효과": "손상 피부 회복 및 진정 효과",
-        "알러지 유발 가능 성분": ["에탄올"],
-        "피부 타입 적합도": "민감성, 트러블 피부에 적합",
-        "주요 기능": ["진정", "재생"],
-        "EWG 등급 요약": "주요 성분은 1~2등급(안전), 에탄올은 3등급(주의)"
+        "성분": "센텔라 아시아티카, 마데카소사이드, 판테놀",
+        "효과": "진정, 피부 재생, 붉은기 완화",
+        "알러지 성분": "에센셜 오일",
+        "피부 타입 적합도": "민감성 피부에 적합",
+        "주요 기능 키워드": "🍃진정, 🌱재생, 💚민감피부케어",
+        "EWG 등급 요약": "대부분 1~3등급"
     },
     "이니스프리 그린티 씨드 세럼": {
-        "성분": ["녹차추출물", "글리세린", "판테놀", "부틸렌글라이콜", "향료"],
-        "효과": "피부 보습 및 항산화 효과",
-        "알러지 유발 가능 성분": ["향료"],
-        "피부 타입 적합도": "모든 피부 타입에 적합, 특히 건조 피부",
-        "주요 기능": ["보습", "항산화"],
-        "EWG 등급 요약": "대부분 성분은 1~2등급(안전), 일부 향료는 5등급(주의)"
-    },
-    "에뛰드 하우스 모이스트 풀 콜라겐 크림": {
-        "성분": ["정제수", "글리세린", "콜라겐", "부틸렌글라이콜", "향료"],
-        "효과": "피부 탄력 개선 및 보습",
-        "알러지 유발 가능 성분": ["향료"],
-        "피부 타입 적합도": "건성 피부에 적합",
-        "주요 기능": ["보습", "탄력"],
-        "EWG 등급 요약": "대부분 1~2등급, 일부 향료 5등급"
-    },
-    "클리오 킬커버 파운웨어 쿠션": {
-        "성분": ["정제수", "티타늄디옥사이드", "징크옥사이드", "글리세린", "실리카"],
-        "효과": "피부 톤 보정 및 자외선 차단",
-        "알러지 유발 가능 성분": [],
-        "피부 타입 적합도": "모든 피부 타입에 적합",
-        "주요 기능": ["커버력", "자외선 차단"],
-        "EWG 등급 요약": "대부분 성분 1~2등급"
-    },
-    "미샤 타임레볼루션 나이트 리페어 앰플": {
-        "성분": ["정제수", "발효된 효모 추출물", "나이아신아마이드", "글리세린", "향료"],
-        "효과": "피부 재생 및 보습 강화",
-        "알러지 유발 가능 성분": ["향료"],
-        "피부 타입 적합도": "모든 피부 타입, 특히 민감성 피부 주의",
-        "주요 기능": ["재생", "보습", "항산화"],
-        "EWG 등급 요약": "대부분 성분 1~2등급, 일부 향료 5등급"
+        "성분": "녹차 추출물, 히알루론산, 판테놀",
+        "효과": "항산화, 보습, 피부 진정",
+        "알러지 성분": "향료",
+        "피부 타입 적합도": "복합성·지성 피부",
+        "주요 기능 키워드": "🌿항산화, 💧수분, 🍃진정",
+        "EWG 등급 요약": "대부분 1~2등급"
     }
 }
 
-# 웹사이트 제목
-st.title("💖 화학공학 × 화장품 성분 분석기 💖")
-st.write("제품명을 입력하면 귀엽게 분석해드려요~ 🥰")
+# 입력창
+st.info("예시: 라네즈 워터뱅크 크림, 닥터자르트 시카페어 크림, 이니스프리 그린티 씨드 세럼")
+product_name = st.text_input("제품명을 입력해주세요 ✨")
 
-# 사용자 입력
-product_name = st.text_input("제품명을 입력하세요:")
+if product_name in products:
+    st.success(f"✨ '{product_name}' 찾았어요! 보고 싶은 내용을 골라주세요 🐥")
 
-# 버튼 클릭 시 분석
-if st.button("제품 분석하기"):
-    if product_name in cosmetics_db:
-        data = cosmetics_db[product_name]
-        
-        st.markdown(f'<div class="product-card">', unsafe_allow_html=True)
-        st.markdown(f'<div class="product-title">💗 {product_name} 💗</div>', unsafe_allow_html=True)
-        st.markdown(f'<p><span class="section-title">성분:</span> {", ".join(data["성분"])}</p>', unsafe_allow_html=True)
-        st.markdown(f'<p><span class="section-title">효과:</span> {data["효과"]}</p>', unsafe_allow_html=True)
-        st.markdown(f'<p><span class="section-title">알러지 유발 성분:</span> {", ".join(data["알러지 유발 가능 성분"])}</p>', unsafe_allow_html=True)
-        st.markdown(f'<p><span class="section-title">피부 타입 적합도:</span> {data["피부 타입 적합도"]}</p>', unsafe_allow_html=True)
-        st.markdown(f'<p><span class="section-title">주요 기능:</span> {", ".join(data["주요 기능"])}</p>', unsafe_allow_html=True)
-        st.markdown(f'<p><span class="section-title">EWG 등급 요약:</span> {data["EWG 등급 요약"]}</p>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-        
-    else:
-        st.error("⚠️ 데이터베이스에 없는 제품입니다. 다른 제품명을 입력해보세요.")
+    # 선택지
+    option = st.radio(
+        "무엇을 보고 싶나요? 🎀",
+        ("성분", "효과", "알러지 성분", "피부 타입 적합도", "주요 기능 키워드", "EWG 등급 요약")
+    )
+
+    # 결과 표시 (귀엽게 카드 스타일)
+    st.markdown(
+        f"""
+        <div style="background-color:#fff0f6; padding:15px; border-radius:20px; 
+        box-shadow: 2px 2px 10px #ffb6c1; margin:10px;">
+        <h3 style="color:#ff69b4;">🌸 {option} 🌸</h3>
+        <p style="font-size:18px;">{products[product_name][option]}</p>
+        </div>
+        """, unsafe_allow_html=True
+    )
+
+elif product_name:
+    st.error("😢 죄송해요, 아직 데이터에 없는 제품이에요!")
